@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="AIC-JavaClient">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/client/AIC-JavaClient.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

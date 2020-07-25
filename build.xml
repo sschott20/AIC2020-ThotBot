@@ -1,0 +1,265 @@
+<project>
+	<!-- Load properties and input tasks -->
+	<loadproperties srcFile="build.defaults" />
+
+	<target name="echo_empty_input">
+		<echo message="Invalid empty input" />
+	</target>
+
+	<scriptdef name="check_input" language="javascript">
+	    <attribute name="prop" />
+	    <attribute name="value" />
+	    <![CDATA[
+			var value = attributes.get("value");
+			if (value.trim().isEmpty()) {
+				project.executeTarget("echo_empty_input");
+			} else {
+				project.setProperty(attributes.get("prop"), value);
+			}
+	    ]]>
+	</scriptdef>
+
+	<target name="get_package">
+		<local name="input" />
+		<input message="Enter package" addproperty="input" />
+		<check_input prop="package" value="${input}" />
+	</target>
+
+	<target name="get_package1">
+		<local name="input" />
+		<input message="Enter package1" addproperty="input" />
+		<check_input prop="package1" value="${input}" />
+	</target>
+
+	<target name="get_package2">
+		<local name="input" />
+		<input message="Enter package2" addproperty="input" />
+		<check_input prop="package2" value="${input}" />
+	</target>
+
+	<target name="get_map">
+		<local name="input" />
+		<input message="Enter map" addproperty="input" />
+		<check_input prop="map" value="${input}" />
+	</target>
+
+	<scriptdef name="get_property" language="javascript">
+	    <attribute name="prop" />
+	    <![CDATA[
+			var prop = attributes.get("prop");
+			while (!project.getProperty(prop)) {
+				project.executeTarget("get_" + prop);
+			}
+	    ]]>
+	</scriptdef>
+
+	<!-- Paths -->
+	<path id="my_classpath">
+		<pathelement location="${basedir}/build/classes" />
+		<pathelement location="${basedir}/jars/aic2020.jar" />
+		<pathelement location="${basedir}/jars/asm-all-5.0.3.jar" />
+	</path>
+
+	<!-- Utils -->
+	<scriptdef language="javascript" name="lower">
+	    <attribute name="string" />
+	    <attribute name="to" />
+	    project.setProperty(
+				attributes.get("to"),
+				attributes.get("string").toLowerCase()
+			);
+	</scriptdef>
+
+	<scriptdef language="javascript" name="replace_point">
+	    <attribute name="string" />
+	    <attribute name="char" />
+	    <attribute name="to" />
+	    project.setProperty(
+				attributes.get("to"),
+				attributes.get("string").replace(".", attributes.get("char"))
+			);
+	</scriptdef>
+
+	<!-- Compile tasks -->
+	<target name="compile">
+		<!-- Parameters -->
+		<get_property prop="package1" />
+		<get_property prop="package2" />
+		<replace_point string="${package1}" char="_" to="folder1" />
+		<replace_point string="${package2}" char="_" to="folder2" />
+		<replace_point string="${package1}" char="/" to="path1" />
+		<replace_point string="${package2}" char="/" to="path2" />
+		<!-- Echo -->
+		<echo message="Compiling ${package1} and ${package2}" />
+		<!-- Clean -->
+		<delete dir="${basedir}/build" />
+		<mkdir  dir="${basedir}/build" />
+		<mkdir  dir="${basedir}/build/classes" />
+		<delete dir="${basedir}/logs" />
+		<mkdir  dir="${basedir}/logs" />
+		<mkdir  dir="${basedir}/logs/compile" />
+		<mkdir  dir="${basedir}/logs/instrument" />
+		<mkdir  dir="${basedir}/logs/run" />
+		<!-- Compile package 1 -->
+		<record name="${basedir}/logs/compile/${folder1}" action="start"
+			 			emacsmode="true" loglevel="warn" />
+		<javac
+			srcdir="${basedir}/src/"
+			destdir="${basedir}/build/classes"
+			includes="aic2020/**,${path1}/**"
+			debug="true"
+			includeAntRuntime="false">
+			<classpath refid="my_classpath" />
+		</javac>
+		<record name="${basedir}/logs/compile/${folder1}" action="stop" />
+		<!-- Compile package 2 -->
+		<record name="${basedir}/logs/compile/${folder2}" action="start"
+			 			emacsmode="true" loglevel="warn" />
+		<javac
+			srcdir="${basedir}/src/"
+			destdir="${basedir}/build/classes"
+			includes="aic2020/**,${path2}/**"
+			debug="true"
+			includeAntRuntime="false">
+			<classpath refid="my_classpath" />
+		</javac>
+		<record name="${basedir}/logs/compile/${folder2}" action="stop" />
+	</target>
+
+	<target name="instrument" depends="compile">
+		<!-- Parameters -->
+		<get_property prop="package1" />
+		<get_property prop="package2" />
+		<replace_point string="${package1}" char="_" to="folder1" />
+		<replace_point string="${package2}" char="_" to="folder2" />
+		<replace_point string="${package1}" char="/" to="path1" />
+		<replace_point string="${package2}" char="/" to="path2" />
+		<!-- Echo -->
+		<echo message="Instrumenting ${package1} and ${package2}" />
+		<!-- Execute the instrumenter to add bytecodes to package 1 -->
+		<java classname="instrumenter.Main" failonerror="true" fork="yes">
+			<classpath refid="my_classpath" />
+			<arg value="${basedir}/build/classes/${path1}" />
+			<arg value="${path1}" />
+			<arg value="true" />
+		</java>
+		<!-- Execute the instrumenter to add bytecodes to package 2 -->
+		<antcall target="instrument2" />
+	</target>
+
+	<!-- Ugly 'if' to check if packages are the same before instrument -->
+  <target name="instrument2" depends="instrument2-check"
+		 			if="instrument2-check-property">
+		<java classname="instrumenter.Main" failonerror="true" fork="yes">
+			<classpath refid="my_classpath" />
+			<arg value="${basedir}/build/classes/${path2}" />
+			<arg value="${path2}" />
+			<arg value="true" />
+		</java>
+  </target>
+
+  <target name="instrument2-check">
+    <condition property="instrument2-check-property">
+			<not>
+				<equals arg1="${package1}" arg2="${package2}" />
+			</not>
+    </condition>
+  </target>
+
+	<!-- Run tasks -->
+	<target name="run" depends="instrument">
+		<!-- Parameters -->
+		<get_property prop="package1" />
+		<get_property prop="package2" />
+		<get_property prop="map" />
+		<replace_point string="${package1}" char="_" to="folder1" />
+		<replace_point string="${package2}" char="_" to="folder2" />
+		<replace_point string="${package1}" char="/" to="path1" />
+		<replace_point string="${package2}" char="/" to="path2" />
+		<!-- Echo -->
+		<echo message="Running ${package1} vs ${package2}" />
+		<!-- Run -->
+		<java classname="aic2020.main.Main" failonerror="true" fork="yes">
+			<jvmarg value="-noverify" />
+			<classpath refid="my_classpath" />
+			<arg value="${package1}" />
+			<arg value="${package2}" />
+			<arg value="${map}" />
+			<arg value="1" />
+			<arg value="0" />
+		</java>
+	</target>
+
+	<target name="run_debug" depends="instrument">
+		<!-- Parameters -->
+		<get_property prop="package1" />
+		<get_property prop="package2" />
+		<get_property prop="map" />
+		<replace_point string="${package1}" char="_" to="folder1" />
+		<replace_point string="${package2}" char="_" to="folder2" />
+		<replace_point string="${package1}" char="/" to="path1" />
+		<replace_point string="${package2}" char="/" to="path2" />
+		<!-- Echo -->
+		<echo message="Running ${package1} vs ${package2}" />
+		<!-- Run -->
+		<java classname="aic2020.main.Main" failonerror="true" fork="yes">
+			<jvmarg value="-noverify" />
+			<jvmarg value="-Xdebug"/>
+			<jvmarg value="-Xnoagent"/>
+			<jvmarg value="-Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=y"/>
+			<classpath refid="my_classpath" />
+			<arg value="${package1}" />
+			<arg value="${package2}" />
+			<arg value="${map}" />
+			<arg value="1" />
+			<arg value="0" />
+		</java>
+	</target>
+
+	<target name="run_no_prints" depends="instrument">
+		<!-- Parameters -->
+		<get_property prop="package1" />
+		<get_property prop="package2" />
+		<get_property prop="map" />
+		<replace_point string="${package1}" char="_" to="folder1" />
+		<replace_point string="${package2}" char="_" to="folder2" />
+		<replace_point string="${package1}" char="/" to="path1" />
+		<replace_point string="${package2}" char="/" to="path2" />
+		<!-- Echo -->
+		<echo message="Running ${package1} vs ${package2}" />
+		<!-- Run -->
+		<java classname="aic2020.main.Main" failonerror="true" fork="yes">
+			<jvmarg value="-noverify" />
+			<classpath refid="my_classpath" />
+			<arg value="${package1}" />
+			<arg value="${package2}" />
+			<arg value="${map}" />
+			<arg value="0" />
+			<arg value="0" />
+		</java>
+	</target>
+
+	<target name="run_challenge" depends="instrument">
+		<!-- Parameters -->
+		<get_property prop="package1" />
+		<get_property prop="package2" />
+		<get_property prop="map" />
+		<replace_point string="${package1}" char="_" to="folder1" />
+		<replace_point string="${package2}" char="_" to="folder2" />
+		<replace_point string="${package1}" char="/" to="path1" />
+		<replace_point string="${package2}" char="/" to="path2" />
+		<!-- Echo -->
+		<echo message="Running ${package1} vs ${package2}" />
+		<!-- Run -->
+		<java classname="aic2020.main.Main" failonerror="true" fork="yes">
+			<jvmarg value="-noverify" />
+			<classpath refid="my_classpath" />
+			<arg value="${package1}" />
+			<arg value="${package2}" />
+			<arg value="${map}" />
+			<arg value="0" />
+			<arg value="1" />
+		</java>
+	</target>
+
+</project>

@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="jars">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/zip4j_1.3.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/jarjar-1.4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/aic2020.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/com.mysql.jdbc_5.1.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/asm-all-5.0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/org.apache.commons.io.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
