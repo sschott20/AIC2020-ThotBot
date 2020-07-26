@@ -33,11 +33,7 @@ public class Worker extends MyUnitClass{
                 }
             }
         }
-//        for (Direction dir : directions) {
-//            if (uc.canSpawn(UnitType.BARRICADE,dir )) {
-//                spawn(UnitType.BARRICADE);
-//            }
-//        }
+
         if (uc.getLocation().distanceSquared(uc.getInitialLocation(uc.getTeam())) > 2) {
             search(uc.getInitialLocation(uc.getTeam()));
         } else if (state == 0) {
@@ -50,7 +46,9 @@ public class Worker extends MyUnitClass{
 
             for (Direction dir : directions){
                 if (uc.canBuildFarm(dir)){
-                    buildFarm();
+                    if (barracksBuilt) {
+                        buildFarm();
+                    }
                 }
             }
         } else if (state == 1){

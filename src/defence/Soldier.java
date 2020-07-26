@@ -15,12 +15,13 @@ public class Soldier extends MyUnitClass {
     int baricadeSize = 15;
     boolean stop = false;
     boolean suicide = true;
+    boolean attack = false;
     /**
      * It moves randomly until it is isolated. It attacks every enemy it sees.
      */
     void play(){
          if (uc.read(3) == 1){
-            if (uc.getRound() % 100 == 0){
+            if (uc.getRound() % 100 == 0 & baricadeSize < 60){
                 baricadeSize += 5;
             }
 
