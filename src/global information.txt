@@ -1,0 +1,23 @@
+Unit Modes 
+Index - Unit
+    Value - Mode
+1 - Friendly Base 
+2 - Essential Worker
+3 - Fumigator
+4 - Soldier
+    0 - defend 
+    1 - attack 
+5 - Infecter
+6 - Market
+7 - Barracks
+8 - Laboratory
+9 - Hospital
+10 - Farm
+
+
+Keep of track of where enemy units are (maybe)
+Enemy Base (row and col)
+Know where the cities are 
+
+20 - () first 
+

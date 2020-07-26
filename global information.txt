@@ -1,0 +1,6 @@
+10 - what mode should each unit be in 
+1 - base 
+2 - Essential Worker
+3 - Fumigator
+4 - Soldier
+5 - Infecter
