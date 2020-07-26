@@ -1,19 +1,19 @@
 
-?
-java:S2140m")Use "java.util.Random.nextInt()" instead.(ŠŠ³š
-2
-java:S3626¾"Remove this redundant jump.(ûÁİ…
-W	java:S125¯"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
-R	java:S125Ê"<This block of commented-out lines of code should be removed.(ÄİúÔ
-R	java:S125¨"<This block of commented-out lines of code should be removed.(ãÇ°
-W	java:S125Î"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
 @
 java:S2140†")Use "java.util.Random.nextInt()" instead.(ŠŠ³š
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ôçïÀşÿÿÿÿ
+W	java:S125¯"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
+2
+java:S3626¾"Remove this redundant jump.(ûÁİ…
+R	java:S125«"<This block of commented-out lines of code should be removed.(ÄİúÔ
+R	java:S125Ê"<This block of commented-out lines of code should be removed.(ÄİúÔ
+?
+java:S2140m")Use "java.util.Random.nextInt()" instead.(ŠŠ³š
 R	java:S125Ç"<This block of commented-out lines of code should be removed.(ãÇ°
 n	java:S1359"YReduce the total number of break and continue statements in this loop to use at most one.(³˜‹®
-t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ôçïÀşÿÿÿÿ
 n
 java:S4144²"WUpdate this method so that its implementation is not identical to "search" on line 147.(í²Ÿº
 2
 java:S3626Ÿ"Remove this redundant jump.(ûÁİ…
-R	java:S125«"<This block of commented-out lines of code should be removed.(ÄİúÔ
+R	java:S125¨"<This block of commented-out lines of code should be removed.(ãÇ°
+W	java:S125Î"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ

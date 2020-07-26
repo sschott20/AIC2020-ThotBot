@@ -35,3 +35,5 @@ G
 src/thotbotv1/Base.java,e\9\e99cf151497e1ca1151039c92d2094433190a6ea
 I
 src/demoplayer2/Base.java,e\1\e16b2dba583a10ec59c577afb97339ce7c42f675
+K
+src/demoplayer2/Worker.java,4\b\4bbc2dff1675c15be281bf9cfd80c5b7bdf7ae01

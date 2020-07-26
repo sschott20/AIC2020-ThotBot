@@ -1,18 +1,11 @@
 
-?
-java:S2140m")Use "java.util.Random.nextInt()" instead.(ŠŠ³š
-G
-java:S2140”")Use "java.util.Random.nextInt()" instead.(ŠŠ³š8¿®ìÄ¸.
-u
-java:S4144À"WUpdate this method so that its implementation is not identical to "search" on line 161.(í²Ÿº8¿®ìÄ¸.
-Y	java:S125ˆ"<This block of commented-out lines of code should be removed.(‹Í ø8ÜÎìÁ¸.
-^	java:S125½"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ8¿®ìÄ¸.
 9
 java:S3626†"Remove this redundant jump.(ûÁÝ…8Åñû»¸.
 9
-java:S3626­"Remove this redundant jump.(ûÁÝ…8¿®ìÄ¸.
-Y	java:S125¶"<This block of commented-out lines of code should be removed.(ãÇž°8¿®ìÄ¸.
-Y	java:S125¹"<This block of commented-out lines of code should be removed.(ÄÝúÔ8¿®ìÄ¸.
+java:S3626¯"Remove this redundant jump.(ûÁÝ…8¿®ìÄ¸.
+G
+java:S2140”")Use "java.util.Random.nextInt()" instead.(ŠŠ³š8¿®ìÄ¸.
 n	java:S1359"YReduce the total number of break and continue statements in this loop to use at most one.(³˜‹®
-9
-java:S3626Ì"Remove this redundant jump.(ûÁÝ…8¿®ìÄ¸.
+?
+java:S2140m")Use "java.util.Random.nextInt()" instead.(ŠŠ³š
+^	java:S125„"<This block of commented-out lines of code should be removed.(žèß‡ÿÿÿÿÿ8çé¥Ì¸.
